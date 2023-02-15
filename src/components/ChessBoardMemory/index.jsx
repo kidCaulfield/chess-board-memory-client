@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Game } from "api/requests";
 import { isObjectEmpty } from "utils/isObjectEmpty";
+import Answers from "./components/Answers";
+import GameForm from "./components/GameForm";
 
-export default function () {
+export default function ChessBoardMemory() {
+  // Think of moving gameboard to context
   const [gameBoard, setGameBoard] = useState({});
   const [gameSquares, setGameSquares] = useState([]);
   const [userAnswers, setUserAnswers] = useState({});
@@ -19,22 +22,7 @@ export default function () {
     initializeGame();
   }
 
-  async function endGame(data) {
-    const res = await Game.post({ route: "game/end", data });
-    setAnswers(res);
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    const { currentTarget } = e;
-    const formData = new FormData(currentTarget);
-    const data = Object.fromEntries(formData);
-    setUserAnswers(data);
-    endGame(data);
-  }
-
   function handleClick(e) {
-    let res = [];
     switch (e.target.name) {
       case "play":
         initializeGame();
@@ -58,45 +46,11 @@ export default function () {
 
   if (isObjectEmpty(gameBoard)) return <div>No Board!</div>;
   if (!isObjectEmpty(answers))
-    return (
-      <div>
-        {Object.keys(answers).map((val) => (
-          <div key={gameBoard[val]}>
-            {gameBoard[val]} : {userAnswers[val]} was {answers[val]}
-          </div>
-        ))}
-        <button name="play-again" onClick={handleClick}>
-          Play Again
-        </button>
-      </div>
-    );
+    return <Answers gameBoard userAnswers answers handleClick />;
   return (
     <div>
       {gameSquares.length ? (
-        <div>
-          <form onSubmit={handleSubmit}>
-            {gameSquares.map((val) => (
-              <div key={gameBoard[val]}>
-                {gameBoard[val]}:
-                <input
-                  type="radio"
-                  id={gameBoard[val]}
-                  name={val}
-                  value="dark"
-                />
-                <label for="html">Dark</label>
-                <input
-                  type="radio"
-                  id={gameBoard[val]}
-                  name={val}
-                  value="light"
-                />
-                <label for="html">Light</label>
-              </div>
-            ))}
-            <input type="submit" value="Finish" />
-          </form>
-        </div>
+        <GameForm gameBoard gameSquares setUserAnswers setAnswers />
       ) : (
         <button name="play" onClick={handleClick}>
           Play
