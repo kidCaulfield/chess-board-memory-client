@@ -1,4 +1,6 @@
 import React from "react";
+import { Game } from "api/requests";
+import Timer from "./Timer";
 
 export default function GameForm({
   gameBoard,
@@ -23,14 +25,15 @@ export default function GameForm({
 
   return (
     <div>
+      <Timer />
       <form onSubmit={handleSubmit}>
         {gameSquares.map((val) => (
           <div key={gameBoard[val]}>
             {gameBoard[val]}:
             <input type="radio" id={gameBoard[val]} name={val} value="dark" />
-            <label for="html">Dark</label>
+            <label>Dark</label>
             <input type="radio" id={gameBoard[val]} name={val} value="light" />
-            <label for="html">Light</label>
+            <label>Light</label>
           </div>
         ))}
         <input type="submit" value="Finish" />

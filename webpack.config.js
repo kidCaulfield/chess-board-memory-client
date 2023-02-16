@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   name: "chess-board-memory",
-  mode: "production",
+  mode: "development",
   optimization: {
     runtimeChunk: "single",
   },

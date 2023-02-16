@@ -46,11 +46,23 @@ export default function ChessBoardMemory() {
 
   if (isObjectEmpty(gameBoard)) return <div>No Board!</div>;
   if (!isObjectEmpty(answers))
-    return <Answers gameBoard userAnswers answers handleClick />;
+    return (
+      <Answers
+        gameBoard={gameBoard}
+        userAnswers={userAnswers}
+        answers={answers}
+        handleClick={handleClick}
+      />
+    );
   return (
     <div>
       {gameSquares.length ? (
-        <GameForm gameBoard gameSquares setUserAnswers setAnswers />
+        <GameForm
+          gameBoard={gameBoard}
+          gameSquares={gameSquares}
+          setUserAnswers={setUserAnswers}
+          setAnswers={setAnswers}
+        />
       ) : (
         <button name="play" onClick={handleClick}>
           Play
