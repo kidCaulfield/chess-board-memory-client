@@ -3,6 +3,8 @@ import { Game } from "api/requests";
 import { isObjectEmpty } from "utils/isObjectEmpty";
 import Answers from "./components/Answers";
 import GameForm from "./components/GameForm";
+import Timer from "./components/Timer";
+import ScoreBoard from "./components/ScoreBoard";
 
 export default function ChessBoardMemory() {
   // Think of moving gameboard to context
@@ -10,13 +12,24 @@ export default function ChessBoardMemory() {
   const [gameSquares, setGameSquares] = useState([]);
   const [userAnswers, setUserAnswers] = useState({});
   const [answers, setAnswers] = useState({});
+  const [time, setTime] = useState(0);
 
   async function initializeGame() {
+    if (!localStorage.getItem("player"))
+      localStorage.setItem(
+        "player",
+        JSON.stringify({
+          results: [],
+          bestTime: null,
+          accuracy: null,
+        })
+      );
     let res = await Game.get({ route: "game/start" });
     setGameSquares(res);
   }
 
   async function replayGame() {
+    setTime(0);
     setUserAnswers({});
     setAnswers({});
     initializeGame();
@@ -56,13 +69,19 @@ export default function ChessBoardMemory() {
     );
   return (
     <div>
+      <ScoreBoard />
       {gameSquares.length ? (
-        <GameForm
-          gameBoard={gameBoard}
-          gameSquares={gameSquares}
-          setUserAnswers={setUserAnswers}
-          setAnswers={setAnswers}
-        />
+        <div>
+          <Timer time={time} setTime={setTime} />
+          <GameForm
+            gameBoard={gameBoard}
+            gameSquares={gameSquares}
+            time={time}
+            setUserAnswers={setUserAnswers}
+            setAnswers={setAnswers}
+            setTime={setTime}
+          />
+        </div>
       ) : (
         <button name="play" onClick={handleClick}>
           Play
