@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Game } from "api/requests";
 import { NUMBER_OF_GAME_QUESTIONS } from "utils/constants";
 
@@ -26,9 +26,9 @@ export default function GameForm({
   gameSquares,
   setUserAnswers,
   setAnswers,
-  time,
-  setTime,
 }) {
+  const [time] = useState(new Date());
+
   async function endGame(data) {
     const res = await Game.post({ route: "game/end", data });
     setAnswers(res);
@@ -38,8 +38,9 @@ export default function GameForm({
     );
     const grade = getGrade(res);
     results.push(calculatePercent(grade));
-    if (grade === NUMBER_OF_GAME_QUESTIONS) bestTime = time.toFixed(1);
-    console.log("time.toFixed(1): ", time.toFixed(1));
+    if (grade === NUMBER_OF_GAME_QUESTIONS)
+      bestTime = ((new Date() - time) / 1000).toFixed(2);
+
     accuracy = calculateAccaracy(results);
     localStorage.setItem(
       "player",

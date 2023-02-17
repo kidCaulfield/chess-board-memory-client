@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Game } from "api/requests";
 import { isObjectEmpty } from "utils/isObjectEmpty";
 import Answers from "./components/Answers";
@@ -12,7 +12,6 @@ export default function ChessBoardMemory() {
   const [gameSquares, setGameSquares] = useState([]);
   const [userAnswers, setUserAnswers] = useState({});
   const [answers, setAnswers] = useState({});
-  const [time, setTime] = useState(0);
 
   async function initializeGame() {
     if (!localStorage.getItem("player"))
@@ -29,7 +28,6 @@ export default function ChessBoardMemory() {
   }
 
   async function replayGame() {
-    setTime(0);
     setUserAnswers({});
     setAnswers({});
     initializeGame();
@@ -72,14 +70,12 @@ export default function ChessBoardMemory() {
       <ScoreBoard />
       {gameSquares.length ? (
         <div>
-          <Timer time={time} setTime={setTime} />
+          <Timer />
           <GameForm
             gameBoard={gameBoard}
             gameSquares={gameSquares}
-            time={time}
             setUserAnswers={setUserAnswers}
             setAnswers={setAnswers}
-            setTime={setTime}
           />
         </div>
       ) : (

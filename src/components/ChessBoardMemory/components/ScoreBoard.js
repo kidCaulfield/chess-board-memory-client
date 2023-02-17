@@ -12,7 +12,7 @@ export default function ScoreBoard() {
   return (
     <div>
       <div>Accuracy: {player.accuracy}</div>
-      {player.bestTime && <div>Best Time: {player.bestTime}</div>}
+      {player.bestTime && <div>Best Time: {player.bestTime} seconds</div>}
     </div>
   );
 }
